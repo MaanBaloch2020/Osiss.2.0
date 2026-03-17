@@ -1,0 +1,101 @@
+{% comment %} templates/page.contact.liquid {% endcomment %}
+{% section 'announcement-bar' %}
+{% section 'header' %}
+
+<section class="contact-sec">
+  <div class="wrap">
+    <p class="sec-eyebrow">✉ GET IN TOUCH</p>
+    <h1 class="sec-ttl">CONTACT US</h1>
+    <div class="sec-rule"></div>
+
+    <div class="contact-grid">
+
+      <!-- Form -->
+      <div>
+        {%- form 'contact', id: 'contactForm' -%}
+          {%- if form.posted_successfully? -%}
+            <div style="background:#f0faf4;border:1px solid #b7e4c7;padding:16px;margin-bottom:20px">
+              <p style="font-size:11px;font-weight:700;color:#2d6a4f;letter-spacing:.5px">✓ MESSAGE SENT! We'll reply within 24 hours.</p>
+            </div>
+          {%- endif -%}
+
+          <div class="contact-form">
+            <div class="form-row">
+              <div class="fg">
+                <label class="fl" for="name">Your Name *</label>
+                <input type="text" id="name" name="contact[name]" class="fi" required autocomplete="name" placeholder="Ayesha Khan">
+              </div>
+              <div class="fg">
+                <label class="fl" for="email">Email Address *</label>
+                <input type="email" id="email" name="contact[email]" class="fi" required autocomplete="email" placeholder="you@example.com">
+              </div>
+            </div>
+            <div class="fg">
+              <label class="fl" for="phone">Phone / WhatsApp</label>
+              <input type="tel" id="phone" name="contact[phone]" class="fi" autocomplete="tel" placeholder="+92 300 0000000">
+            </div>
+            <div class="fg">
+              <label class="fl" for="subject">Subject *</label>
+              <select id="subject" name="contact[subject]" class="fsel" required>
+                <option value="">-- Select topic --</option>
+                <option value="order">Order / Tracking</option>
+                <option value="product">Product Question</option>
+                <option value="return">Returns / Refund</option>
+                <option value="wholesale">Wholesale</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="fg">
+              <label class="fl" for="message">Message *</label>
+              <textarea id="message" name="contact[body]" class="fta" required placeholder="Tell us how we can help..."></textarea>
+            </div>
+            <button type="submit" class="btn-submit">SEND MESSAGE →</button>
+          </div>
+        {%- endform -%}
+      </div>
+
+      <!-- Info -->
+      <div class="contact-info">
+        <div class="ci-item">
+          <div class="ci-icon">
+            <svg width="18" height="18"><use href="#ico-wa"/></svg>
+          </div>
+          <div class="ci-text">
+            <h4>WHATSAPP</h4>
+            <p><a href="https://wa.me/923021345111" target="_blank" rel="noopener">+92 302 1345111</a><br>Mon–Sat · 9am–7pm PKT</p>
+          </div>
+        </div>
+        <div class="ci-item">
+          <div class="ci-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <div class="ci-text">
+            <h4>EMAIL</h4>
+            <p><a href="mailto:hello@osiss.pk">hello@osiss.pk</a><br>Reply within 24 hours</p>
+          </div>
+        </div>
+        <div class="ci-item">
+          <div class="ci-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div class="ci-text">
+            <h4>LOCATION</h4>
+            <p>🇵🇰 Pakistan<br>Shipping Nationwide</p>
+          </div>
+        </div>
+        <div style="background:#0a0a0a;padding:20px;margin-top:8px">
+          <p style="font-size:9px;font-weight:900;letter-spacing:2px;color:#c8a951;margin-bottom:8px;text-transform:uppercase">CERTIFICATIONS</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <span style="font-size:8px;font-weight:800;letter-spacing:1px;border:1px solid #333;padding:4px 10px;color:#888">PCSIR</span>
+            <span style="font-size:8px;font-weight:800;letter-spacing:1px;border:1px solid #333;padding:4px 10px;color:#888">DRAP</span>
+            <span style="font-size:8px;font-weight:800;letter-spacing:1px;border:1px solid #333;padding:4px 10px;color:#888">GMP</span>
+            <span style="font-size:8px;font-weight:800;letter-spacing:1px;border:1px solid #333;padding:4px 10px;color:#888">CRUELTY-FREE</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% section 'footer' %}

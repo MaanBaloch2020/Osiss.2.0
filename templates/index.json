@@ -1,0 +1,101 @@
+{
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "blocks": {
+        "ticker-1": { "type": "ticker_item", "settings": { "text": "FREE SHIPPING ON ORDERS OVER PKR 2,000" } },
+        "ticker-2": { "type": "ticker_item", "settings": { "text": "PCSIR & DRAP CERTIFIED" } },
+        "ticker-3": { "type": "ticker_item", "settings": { "text": "DERMATOLOGIST TESTED" } },
+        "ticker-4": { "type": "ticker_item", "settings": { "text": "CRUELTY FREE · MADE IN PAKISTAN 🇵🇰" } },
+        "ticker-5": { "type": "ticker_item", "settings": { "text": "COD AVAILABLE NATIONWIDE" } }
+      },
+      "block_order": ["ticker-1","ticker-2","ticker-3","ticker-4","ticker-5"],
+      "settings": { "show_sale_strip": true, "show_ticker": true }
+    },
+    "header": {
+      "type": "header",
+      "settings": { "menu": "main-menu", "mobile_menu": "main-menu" }
+    },
+    "hero-banner": {
+      "type": "hero-banner",
+      "blocks": {
+        "badge-1": { "type": "badge", "settings": { "text": "PCSIR" } },
+        "badge-2": { "type": "badge", "settings": { "text": "DRAP" } },
+        "badge-3": { "type": "badge", "settings": { "text": "GMP" } },
+        "badge-4": { "type": "badge", "settings": { "text": "🌿 CRUELTY-FREE" } }
+      },
+      "block_order": ["badge-1","badge-2","badge-3","badge-4"],
+      "settings": {
+        "eyebrow_text": "DERMATOLOGY BACKED INNOVATION",
+        "heading_line1": "SCIENCE",
+        "heading_line2": "BACKED",
+        "heading_line3": "SKINCARE",
+        "subheading": "Where Dermatology Meets Daily Beauty Rituals.",
+        "pakistan_label": "🇵🇰 PROUDLY MADE IN PAKISTAN",
+        "btn1_text": "SHOP NOW →",
+        "btn2_text": "OUR STORY",
+        "show_float_badge_top": true,
+        "float_badge_top_bold": "SPF 50+ PA++++",
+        "float_badge_top_small": "Broad Spectrum Shield",
+        "show_float_badge_bottom": true,
+        "float_badge_bottom_bold": "4.9/5 · 2,500+ Reviews",
+        "float_badge_bottom_small": "Verified Customers"
+      }
+    },
+    "trust-bar": {
+      "type": "trust-bar",
+      "blocks": {
+        "t1": { "type": "trust_item", "settings": { "icon": "truck",   "text": "FREE SHIPPING OVER PKR 2,000" } },
+        "t2": { "type": "trust_item", "settings": { "icon": "shield",  "text": "PCSIR & DRAP CERTIFIED" } },
+        "t3": { "type": "trust_item", "settings": { "icon": "refresh", "text": "7-DAY EASY RETURNS" } },
+        "t4": { "type": "trust_item", "settings": { "icon": "check",   "text": "COD AVAILABLE" } }
+      },
+      "block_order": ["t1","t2","t3","t4"]
+    },
+    "bestsellers": {
+      "type": "featured-collection",
+      "settings": {
+        "eyebrow": "★ CUSTOMER FAVOURITES",
+        "title": "NO.1 BEST SELLERS",
+        "products_limit": 6,
+        "background": "white",
+        "btn_style": "black",
+        "show_view_all": true,
+        "show_view_all_bottom": true
+      }
+    },
+    "new-arrivals": {
+      "type": "featured-collection",
+      "settings": {
+        "eyebrow": "● JUST LAUNCHED",
+        "title": "NEW ARRIVALS",
+        "products_limit": 6,
+        "background": "grey",
+        "btn_style": "black",
+        "show_view_all": true,
+        "show_view_all_bottom": false
+      }
+    },
+    "reviews": {
+      "type": "reviews",
+      "blocks": {
+        "rv1": { "type": "review", "settings": { "initials": "VB", "name": "Verified Buyer", "location": "Lahore",    "rating": 5, "product_name": "Gentle Foaming Cleanser", "text": "My skin is completely transformed in 6 weeks. Acne scars fading, skin is plump, and I get compliments daily. Worth every rupee!" } },
+        "rv2": { "type": "review", "settings": { "initials": "VB", "name": "Verified Buyer", "location": "Karachi",   "rating": 5, "product_name": "Gentle Foaming Cleanser", "text": "Finally a Pakistani face wash that doesn't strip my skin! Clean without that tight, dry feeling. Absolutely love it." } },
+        "rv3": { "type": "review", "settings": { "initials": "VB", "name": "Verified Buyer", "location": "Islamabad", "rating": 5, "product_name": "Gentle Foaming Cleanser", "text": "My breakouts reduced by 80% in just 3 weeks. OSISS has a customer for life." } }
+      },
+      "block_order": ["rv1","rv2","rv3"],
+      "settings": { "avg_rating": "4.9", "total_reviews": 2500, "stars_5": 2350, "stars_4": 120, "stars_3": 20, "stars_2": 7, "stars_1": 3 }
+    },
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "col1": { "type": "link_list", "settings": { "heading": "SHOP", "menu": "main-menu" } },
+        "col2": { "type": "link_list", "settings": { "heading": "HELP", "menu": "footer" } },
+        "col3": { "type": "text_column", "settings": { "heading": "CONTACT US", "content": "<p>WhatsApp: +92 302 1345111</p><p>Email: hello@osiss.pk</p><p>Mon–Sat: 9am–7pm PKT</p>" } }
+      },
+      "block_order": ["col1","col2","col3"],
+      "settings": { "show_newsletter": true, "newsletter_heading": "JOIN THE OSISS FAMILY", "made_in_text": "🇵🇰 Made in Pakistan" }
+    }
+  },
+  "order": ["announcement-bar","header","hero-banner","trust-bar","bestsellers","new-arrivals","reviews","footer"]
+}

@@ -1,0 +1,9 @@
+{
+  "sections": {
+    "announcement-bar":  { "type": "announcement-bar" },
+    "header":            { "type": "header" },
+    "main-collection":   { "type": "main-collection", "settings": { "products_per_page": 16 } },
+    "footer":            { "type": "footer" }
+  },
+  "order": ["announcement-bar","header","main-collection","footer"]
+}

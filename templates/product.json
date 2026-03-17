@@ -1,0 +1,9 @@
+{
+  "sections": {
+    "announcement-bar": { "type": "announcement-bar" },
+    "header":           { "type": "header" },
+    "main-product":     { "type": "main-product", "settings": { "show_related": true } },
+    "footer":           { "type": "footer" }
+  },
+  "order": ["announcement-bar","header","main-product","footer"]
+}
