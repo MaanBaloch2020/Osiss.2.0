@@ -1,0 +1,125 @@
+{% comment %} sections/featured-collection.liquid {% endcomment %}
+
+{%- assign collection = section.settings.collection -%}
+
+<section class="home-sec{% if section.settings.background == 'grey' %} home-sec--grey{% elsif section.settings.background == 'dark' %} home-sec--dark{% endif %}">
+  <div class="wrap">
+
+    <div class="home-sec-head">
+      <div>
+        <p class="sec-eyebrow" style="{% if section.settings.background == 'dark' %}color:#c8a951{% endif %}">
+          {{ section.settings.eyebrow }}
+        </p>
+        <h2 class="sec-ttl" style="{% if section.settings.background == 'dark' %}color:#fff{% endif %}">
+          {{ section.settings.title }}
+        </h2>
+      </div>
+      {%- if section.settings.show_view_all and collection != blank -%}
+        <a href="{{ collection.url }}" class="sec-view-all-btn{% if section.settings.btn_style == 'gold' %} sec-view-all-btn--gold{% endif %}">
+          VIEW ALL →
+        </a>
+      {%- endif -%}
+    </div>
+
+    <div class="caro-outer">
+      <div class="caro-track" id="caro-{{ section.id }}">
+        {%- if collection != blank -%}
+          {%- for product in collection.products limit: section.settings.products_limit -%}
+            {%- render 'product-card', product: product -%}
+          {%- endfor -%}
+        {%- else -%}
+          {%- for i in (1..5) -%}
+            {%- render 'product-card-placeholder' -%}
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    </div>
+
+    {%- if section.settings.show_view_all_bottom and collection != blank -%}
+      <div class="caro-va-row">
+        <a href="{{ collection.url }}" class="caro-va-btn{% if section.settings.btn_style == 'gold' %} caro-va-btn--gold{% endif %}">
+          VIEW ALL {{ collection.title | upcase }} →
+        </a>
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Featured Collection",
+  "tag": "div",
+  "class": "featured-collection-section",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "★ CUSTOMER FAVOURITES"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section title",
+      "default": "BEST SELLERS"
+    },
+    {
+      "type": "range",
+      "id": "products_limit",
+      "min": 4,
+      "max": 12,
+      "step": 1,
+      "default": 6,
+      "label": "Number of products"
+    },
+    {
+      "type": "select",
+      "id": "background",
+      "label": "Background",
+      "options": [
+        { "value": "white", "label": "White" },
+        { "value": "grey",  "label": "Light grey" },
+        { "value": "dark",  "label": "Dark (black)" }
+      ],
+      "default": "white"
+    },
+    {
+      "type": "select",
+      "id": "btn_style",
+      "label": "Button style",
+      "options": [
+        { "value": "black", "label": "Black" },
+        { "value": "gold",  "label": "Gold" }
+      ],
+      "default": "black"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show 'View All' button (top right)",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all_bottom",
+      "label": "Show 'View All' button (bottom)",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Collection",
+      "settings": {
+        "eyebrow": "★ CUSTOMER FAVOURITES",
+        "title": "BEST SELLERS"
+      }
+    }
+  ]
+}
+{% endschema %}

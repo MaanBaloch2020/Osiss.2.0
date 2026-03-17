@@ -1,0 +1,257 @@
+{% comment %} sections/main-product.liquid {% endcomment %}
+
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+{%- assign featured_image = current_variant.featured_image | default: product.featured_image -%}
+
+<section class="product-page">
+  <div class="wrap">
+
+    <!-- Breadcrumb -->
+    <nav class="prod-breadcrumb" aria-label="Breadcrumb" style="margin-bottom:16px">
+      <a href="/">Home</a> /
+      {%- if collection -%}
+        <a href="{{ collection.url }}">{{ collection.title }}</a> /
+      {%- else -%}
+        <a href="/collections/all">Products</a> /
+      {%- endif -%}
+      <span>{{ product.title }}</span>
+    </nav>
+
+    <div class="prod-page-grid">
+
+      <!-- Gallery -->
+      <div class="prod-gallery">
+        <div class="prod-main-img">
+          {%- if featured_image -%}
+            <img
+              id="prodMainImg"
+              src="{{ featured_image | image_url: width: 800 }}"
+              alt="{{ featured_image.alt | default: product.title }}"
+              loading="eager"
+              width="800"
+              height="800"
+              srcset="{{ featured_image | image_url: width: 400 }} 400w,
+                      {{ featured_image | image_url: width: 800 }} 800w"
+              sizes="(min-width: 768px) 50vw, 100vw"
+            >
+          {%- else -%}
+            <div style="color:#bbb;font-size:12px;font-weight:700;letter-spacing:1px">NO IMAGE</div>
+          {%- endif -%}
+        </div>
+
+        {%- if product.images.size > 1 -%}
+          <div class="prod-thumbs">
+            {%- for img in product.images -%}
+              <div class="prod-thumb{% if img == featured_image %} active{% endif %}" onclick="
+                document.getElementById('prodMainImg').src='{{ img | image_url: width: 800 }}';
+                document.querySelectorAll('.prod-thumb').forEach(function(t){t.classList.remove('active')});
+                this.classList.add('active')
+              ">
+                <img
+                  src="{{ img | image_url: width: 120 }}"
+                  alt="{{ img.alt | default: product.title }}"
+                  loading="lazy"
+                  width="60"
+                  height="60"
+                >
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <!-- Product Info -->
+      <div class="prod-info">
+
+        {%- if product.vendor != blank -%}
+          <p style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#c8a951">{{ product.vendor }}</p>
+        {%- endif -%}
+
+        <h1 class="prod-title">{{ product.title }}</h1>
+
+        <!-- Rating row -->
+        <div class="prod-rating-row">
+          <div style="display:flex;gap:2px">
+            {%- for i in (1..5) -%}
+              <svg width="14" height="14" style="color:#000"><use href="#ico-star"/></svg>
+            {%- endfor -%}
+          </div>
+          <span class="prod-rating-txt">4.9/5 (2,500+ reviews)</span>
+        </div>
+
+        <!-- Price -->
+        <div class="prod-price-row">
+          {%- if current_variant.compare_at_price > current_variant.price -%}
+            <span class="prod-price">PKR {{ current_variant.price | money_without_currency }}</span>
+            <span class="prod-price-orig">PKR {{ current_variant.compare_at_price | money_without_currency }}</span>
+            {%- assign save_pct = current_variant.compare_at_price | minus: current_variant.price | times: 100 | divided_by: current_variant.compare_at_price -%}
+            <span class="prod-save-chip">SAVE {{ save_pct }}%</span>
+          {%- else -%}
+            <span class="prod-price">PKR {{ current_variant.price | money_without_currency }}</span>
+          {%- endif -%}
+        </div>
+
+        <!-- Description -->
+        <div class="prod-desc">{{ product.description }}</div>
+
+        <!-- Variants -->
+        {%- if product.has_only_default_variant == false -%}
+          {%- for option in product.options_with_values -%}
+            <div class="prod-variants">
+              <p class="prod-var-label">{{ option.name }}: <strong>{{ option.selected_value }}</strong></p>
+              <div class="prod-var-opts">
+                {%- for value in option.values -%}
+                  <button
+                    class="var-btn{% if option.selected_value == value %} active{% endif %}"
+                    onclick="selectVariant(this, '{{ option.name }}', '{{ value }}')"
+                  >{{ value }}</button>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        {%- endif -%}
+
+        <!-- Qty + ATC -->
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div class="prod-qty-row">
+            <span class="prod-qty-label">QTY:</span>
+            <div class="qty-ctrl">
+              <button class="qbtn" id="prodQtyMinus" aria-label="Decrease quantity">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+              <span class="qnum" id="prodQty">1</span>
+              <button class="qbtn" id="prodQtyPlus" aria-label="Increase quantity">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+            </div>
+          </div>
+
+          {%- if current_variant.available -%}
+            <button
+              class="prod-atc"
+              id="prodAtcBtn"
+              data-variant-id="{{ current_variant.id }}"
+              aria-label="Add {{ product.title }} to cart"
+            >ADD TO CART</button>
+          {%- else -%}
+            <button class="prod-atc" disabled style="background:#ccc;cursor:not-allowed">SOLD OUT</button>
+          {%- endif -%}
+
+          <a
+            href="https://wa.me/{{ settings.whatsapp_number | default: '923021345111' }}?text={{ 'Hi! I want to order: ' | append: product.title | append: ' — PKR ' | append: current_variant.price | divided_by: 100 | url_encode }}"
+            class="btn-wa"
+            target="_blank"
+            rel="noopener"
+            style="display:flex;text-align:center;justify-content:center"
+          >
+            <svg width="18" height="18"><use href="#ico-wa"/></svg>
+            ORDER VIA WHATSAPP
+          </a>
+        </div>
+
+        <!-- Features / Trust -->
+        <div class="prod-features">
+          <div class="prod-feature">
+            <svg width="14" height="14"><use href="#ico-truck"/></svg>
+            Free shipping on orders over PKR 2,000
+          </div>
+          <div class="prod-feature">
+            <svg width="14" height="14"><use href="#ico-shield"/></svg>
+            PCSIR & DRAP Certified · Dermatologist Tested
+          </div>
+          <div class="prod-feature">
+            <svg width="14" height="14"><use href="#ico-refresh"/></svg>
+            7-day easy returns
+          </div>
+          <div class="prod-feature">
+            <svg width="14" height="14"><use href="#ico-check"/></svg>
+            COD available nationwide · 🇵🇰 Made in Pakistan
+          </div>
+        </div>
+
+        <!-- Patch note -->
+        <p style="font-size:10px;color:#888;background:#fff8e1;border:1px solid #ffe082;padding:8px 12px;line-height:1.6">
+          ⚠️ Patch Test Required: Apply a small amount to your inner arm for 24 hours before full use. Discontinue if irritation occurs.
+        </p>
+
+      </div>
+    </div>
+
+    {%- if section.settings.show_related -%}
+      <!-- Related Products -->
+      {%- if collection != blank -%}
+        <div style="margin-top:52px;border-top:1px solid #ebebeb;padding-top:36px">
+          <p class="sec-eyebrow">◈ COMPLETE YOUR ROUTINE</p>
+          <h2 class="sec-ttl">YOU MAY ALSO LIKE</h2>
+          <div class="pgrid">
+            {%- for related in collection.products limit: 4 -%}
+              {%- unless related.id == product.id -%}
+                {%- render 'product-card', product: related -%}
+              {%- endunless -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+
+  </div>
+</section>
+
+<script>
+// Variant selector — updates price, images, ATC variant ID
+var productVariants = {{ product.variants | json }};
+
+function selectVariant(btn, optionName, optionValue) {
+  // Update active state
+  btn.closest('.prod-var-opts').querySelectorAll('.var-btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+
+  // Find matching variant
+  var selectedOptions = {};
+  document.querySelectorAll('.prod-var-opts').forEach(function(group, i) {
+    var activeBtn = group.querySelector('.var-btn.active');
+    if (activeBtn) selectedOptions['option' + (i + 1)] = activeBtn.textContent.trim();
+  });
+
+  var variant = productVariants.find(function(v) {
+    return Object.keys(selectedOptions).every(function(k) { return v[k] === selectedOptions[k]; });
+  });
+
+  if (variant) {
+    // Update price display
+    var priceEl = document.querySelector('.prod-price');
+    if (priceEl) priceEl.textContent = 'PKR ' + (variant.price / 100).toLocaleString('en-PK', { minimumFractionDigits: 0 });
+
+    // Update ATC button variant ID
+    var atcBtn = document.getElementById('prodAtcBtn');
+    if (atcBtn) atcBtn.setAttribute('data-variant-id', variant.id);
+
+    // Update main image if variant has featured image
+    if (variant.featured_image) {
+      var mainImg = document.getElementById('prodMainImg');
+      if (mainImg) mainImg.src = variant.featured_image.src;
+    }
+  }
+}
+</script>
+
+{% schema %}
+{
+  "name": "Product Page",
+  "tag": "div",
+  "class": "product-page-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_related",
+      "label": "Show related products",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Page"
+    }
+  ]
+}
+{% endschema %}

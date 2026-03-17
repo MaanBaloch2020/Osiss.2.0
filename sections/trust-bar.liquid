@@ -1,0 +1,69 @@
+{% comment %} sections/trust-bar.liquid {% endcomment %}
+
+<div class="trust-bar">
+  <div class="trust-grid">
+    {%- for block in section.blocks -%}
+      <div class="ti" {{ block.shopify_attributes }}>
+        {%- if block.settings.icon == 'truck' -%}
+          <svg width="14" height="14"><use href="#ico-truck"/></svg>
+        {%- elsif block.settings.icon == 'shield' -%}
+          <svg width="14" height="14"><use href="#ico-shield"/></svg>
+        {%- elsif block.settings.icon == 'refresh' -%}
+          <svg width="14" height="14"><use href="#ico-refresh"/></svg>
+        {%- elsif block.settings.icon == 'check' -%}
+          <svg width="14" height="14"><use href="#ico-check"/></svg>
+        {%- else -%}
+          <svg width="14" height="14"><use href="#ico-check"/></svg>
+        {%- endif -%}
+        <span>{{ block.settings.text }}</span>
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Trust Bar",
+  "tag": "div",
+  "class": "trust-bar-section",
+  "limit": 1,
+  "blocks": [
+    {
+      "type": "trust_item",
+      "name": "Trust Item",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "truck",   "label": "Truck / Shipping" },
+            { "value": "shield",  "label": "Shield / Secure" },
+            { "value": "refresh", "label": "Returns" },
+            { "value": "check",   "label": "Checkmark" }
+          ],
+          "default": "truck"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "FREE SHIPPING OVER PKR 2,000"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trust Bar",
+      "blocks": [
+        { "type": "trust_item", "settings": { "icon": "truck",   "text": "FREE SHIPPING OVER PKR 2,000" } },
+        { "type": "trust_item", "settings": { "icon": "shield",  "text": "PCSIR & DRAP CERTIFIED" } },
+        { "type": "trust_item", "settings": { "icon": "refresh", "text": "7-DAY EASY RETURNS" } },
+        { "type": "trust_item", "settings": { "icon": "check",   "text": "COD AVAILABLE" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

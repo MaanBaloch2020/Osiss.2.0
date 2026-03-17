@@ -1,0 +1,165 @@
+{% comment %} sections/header.liquid {% endcomment %}
+
+<!-- ══ SITE HEADER ══ -->
+<header class="site-header" role="banner">
+  <div class="hdr-inner">
+
+    <!-- LEFT: Burger + Desktop Nav -->
+    <div class="hdr-left">
+      <button class="burger burger-only" id="burgerBtn" aria-label="Open menu" aria-expanded="false">
+        <svg width="22" height="22"><use href="#ico-menu"/></svg>
+      </button>
+      <nav class="desk" role="navigation" aria-label="Main navigation">
+        {%- for link in section.settings.menu.links -%}
+          {%- if link.links != blank -%}
+            <a href="{{ link.url }}">{{ link.title }}</a>
+          {%- else -%}
+            <a href="{{ link.url }}"{% if link.active %} aria-current="page"{% endif %}>{{ link.title }}</a>
+          {%- endif -%}
+        {%- endfor -%}
+      </nav>
+    </div>
+
+    <!-- CENTER: Logo -->
+    <div class="hdr-center">
+      <a href="/" class="logo" aria-label="{{ shop.name }} — Home">
+        {%- if section.settings.logo != blank -%}
+          <img
+            src="{{ section.settings.logo | image_url: width: 200 }}"
+            alt="{{ shop.name }}"
+            width="{{ section.settings.logo_width }}"
+            height="auto"
+            loading="eager"
+          >
+        {%- else -%}
+          {{ shop.name | upcase }}<sup>™</sup>
+        {%- endif -%}
+      </a>
+    </div>
+
+    <!-- RIGHT: Wishlist + Cart -->
+    <div class="hdr-right">
+      <button class="ib" id="wishlistBtn" aria-label="Wishlist">
+        <svg width="20" height="20"><use href="#ico-heart"/></svg>
+      </button>
+      <button class="cart-ib" id="cartOpenBtn" aria-label="Cart">
+        <svg width="20" height="20"><use href="#ico-bag"/></svg>
+        <span class="cbadge" id="cartBadge" aria-label="items in cart">0</span>
+      </button>
+    </div>
+
+  </div>
+</header>
+
+<!-- ══ MOBILE DRAWER NAV ══ -->
+<div class="drawer-overlay" id="drawerOverlay" aria-hidden="true"></div>
+<nav class="drawer-panel" id="drawerPanel" role="dialog" aria-label="Mobile navigation" aria-modal="true">
+  <div class="drawer-hdr">
+    <span class="drawer-logo">{{ shop.name | upcase }}<sup>™</sup></span>
+    <button class="ib" id="drawerCloseBtn" aria-label="Close menu">
+      <svg width="22" height="22"><use href="#ico-x"/></svg>
+    </button>
+  </div>
+
+  <div class="drawer-nav">
+    {%- for link in section.settings.mobile_menu.links -%}
+      {%- if link.links != blank -%}
+        <div class="drawer-cat-wrap">
+          <button class="drawer-cat-btn" onclick="toggleDrawerCat('sub-{{ forloop.index }}')" aria-expanded="false">
+            {{ link.title }}
+            <svg class="drawer-cat-arrow" width="16" height="16"><use href="#ico-chevron-down"/></svg>
+          </button>
+          <div class="drawer-subcat" id="sub-{{ forloop.index }}">
+            <a href="{{ link.url }}" class="drawer-sub-lnk">All {{ link.title }}</a>
+            {%- for child in link.links -%}
+              <a href="{{ child.url }}" class="drawer-sub-lnk">{{ child.title }}</a>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- else -%}
+        <a href="{{ link.url }}" class="drawer-lnk">
+          {{ link.title }}
+          <svg width="16" height="16"><use href="#ico-chevron-right"/></svg>
+        </a>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+
+  <div class="drawer-footer">
+    {%- if section.settings.show_social_in_drawer -%}
+      <div style="display:flex;gap:10px;margin-bottom:12px">
+        {%- if settings.social_instagram_link != blank -%}
+          <a href="{{ settings.social_instagram_link }}" target="_blank" rel="noopener" aria-label="Instagram" style="padding:6px;color:#555">
+            <svg width="18" height="18"><use href="#ico-instagram"/></svg>
+          </a>
+        {%- endif -%}
+        {%- if settings.social_facebook_link != blank -%}
+          <a href="{{ settings.social_facebook_link }}" target="_blank" rel="noopener" aria-label="Facebook" style="padding:6px;color:#555">
+            <svg width="18" height="18"><use href="#ico-facebook"/></svg>
+          </a>
+        {%- endif -%}
+        {%- if settings.social_tiktok_link != blank -%}
+          <a href="{{ settings.social_tiktok_link }}" target="_blank" rel="noopener" aria-label="TikTok" style="padding:6px;color:#555">
+            <svg width="18" height="18"><use href="#ico-tiktok"/></svg>
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+    <p>{{ section.settings.drawer_footer_text }}</p>
+  </div>
+</nav>
+
+{% schema %}
+{
+  "name": "Header",
+  "tag": "div",
+  "class": "header-section",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 80,
+      "max": 250,
+      "step": 10,
+      "default": 140,
+      "unit": "px",
+      "label": "Logo width"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "default": "main-menu",
+      "label": "Desktop menu"
+    },
+    {
+      "type": "link_list",
+      "id": "mobile_menu",
+      "default": "main-menu",
+      "label": "Mobile menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social_in_drawer",
+      "label": "Show social icons in mobile drawer",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "drawer_footer_text",
+      "label": "Mobile drawer footer text",
+      "default": "🇵🇰 Proudly Made in Pakistan · PCSIR · DRAP · GMP"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Header"
+    }
+  ]
+}
+{% endschema %}

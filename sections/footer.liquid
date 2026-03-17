@@ -1,0 +1,214 @@
+{% comment %} sections/footer.liquid {% endcomment %}
+
+<footer class="site-footer" role="contentinfo">
+  <div class="wrap">
+    <div class="foot-cols">
+
+      <!-- Brand column -->
+      <div class="foot-brand">
+        <div class="foot-logo">
+          {%- if section.settings.footer_logo != blank -%}
+            <img src="{{ section.settings.footer_logo | image_url: width: 160 }}" alt="{{ shop.name }}" width="120" height="auto" loading="lazy">
+          {%- else -%}
+            {{ shop.name | upcase }}<sup>™</sup>
+          {%- endif -%}
+        </div>
+        <p>{{ section.settings.brand_description }}</p>
+        <div class="foot-socials">
+          {%- if settings.social_instagram_link != blank -%}
+            <a href="{{ settings.social_instagram_link }}" target="_blank" rel="noopener" aria-label="Instagram">
+              <svg width="16" height="16"><use href="#ico-instagram"/></svg>
+            </a>
+          {%- endif -%}
+          {%- if settings.social_facebook_link != blank -%}
+            <a href="{{ settings.social_facebook_link }}" target="_blank" rel="noopener" aria-label="Facebook">
+              <svg width="16" height="16"><use href="#ico-facebook"/></svg>
+            </a>
+          {%- endif -%}
+          {%- if settings.social_tiktok_link != blank -%}
+            <a href="{{ settings.social_tiktok_link }}" target="_blank" rel="noopener" aria-label="TikTok">
+              <svg width="16" height="16"><use href="#ico-tiktok"/></svg>
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <!-- Link columns -->
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'link_list' -%}
+          <div class="foot-col" {{ block.shopify_attributes }}>
+            <h4>{{ block.settings.heading }}</h4>
+            {%- if block.settings.menu != blank -%}
+              <ul>
+                {%- for link in block.settings.menu.links -%}
+                  <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+          </div>
+        {%- elsif block.type == 'text_column' -%}
+          <div class="foot-col" {{ block.shopify_attributes }}>
+            <h4>{{ block.settings.heading }}</h4>
+            <div style="font-size:11px;color:#888;line-height:1.9">{{ block.settings.content }}</div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+
+    </div>
+  </div>
+
+  <!-- Newsletter -->
+  {%- if section.settings.show_newsletter -%}
+    <div class="foot-newsletter">
+      <div class="foot-newsletter-inner">
+        <div>
+          <p class="foot-nl-txt">{{ section.settings.newsletter_heading }}</p>
+          <p style="font-size:10px;color:#666;margin-top:3px">{{ section.settings.newsletter_subtext }}</p>
+        </div>
+        <form class="foot-nl-form" action="/contact#newsletter" method="post" accept-charset="UTF-8">
+          <input type="hidden" name="form_type" value="customer">
+          <input type="hidden" name="utf8" value="✓">
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          <input
+            type="email"
+            name="contact[email]"
+            class="foot-nl-input"
+            placeholder="{{ section.settings.newsletter_placeholder }}"
+            required
+            autocomplete="email"
+          >
+          <button type="submit" class="foot-nl-btn">{{ section.settings.newsletter_btn }}</button>
+        </form>
+      </div>
+    </div>
+  {%- endif -%}
+
+  <!-- Bottom bar -->
+  <div class="foot-bottom">
+    <div class="foot-bottom-inner">
+      <p class="foot-copy">
+        © {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.
+        {%- if section.settings.made_in_text != blank %} · {{ section.settings.made_in_text }}{%- endif -%}
+      </p>
+      <div class="foot-pay">
+        <span class="pay-badge">COD</span>
+        <span class="pay-badge">BANK</span>
+        <span class="pay-badge">JAZZ CASH</span>
+        <span class="pay-badge">EASYPAISA</span>
+      </div>
+    </div>
+  </div>
+
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "tag": "div",
+  "class": "footer-section",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "footer_logo",
+      "label": "Footer logo (optional)"
+    },
+    {
+      "type": "textarea",
+      "id": "brand_description",
+      "label": "Brand description",
+      "default": "Dermatology-backed skincare. PCSIR & DRAP certified. Proudly made in Pakistan 🇵🇰"
+    },
+    {
+      "type": "text",
+      "id": "made_in_text",
+      "label": "Made in text",
+      "default": "🇵🇰 Made in Pakistan"
+    },
+    {
+      "type": "header",
+      "content": "Newsletter"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_newsletter",
+      "label": "Show newsletter signup",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "newsletter_heading",
+      "label": "Newsletter heading",
+      "default": "JOIN THE OSISS FAMILY"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_subtext",
+      "label": "Newsletter subtext",
+      "default": "Get skincare tips, new launches & exclusive offers."
+    },
+    {
+      "type": "text",
+      "id": "newsletter_placeholder",
+      "label": "Email placeholder",
+      "default": "YOUR EMAIL ADDRESS"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_btn",
+      "label": "Subscribe button text",
+      "default": "SUBSCRIBE"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "link_list",
+      "name": "Link Column",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Column heading",
+          "default": "SHOP"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu",
+          "default": "main-menu"
+        }
+      ]
+    },
+    {
+      "type": "text_column",
+      "name": "Text Column",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Column heading",
+          "default": "CONTACT"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "<p>WhatsApp: +92 302 1345111</p><p>Email: hello@osiss.pk</p><p>Mon–Sat: 9am – 7pm PKT</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer",
+      "blocks": [
+        { "type": "link_list", "settings": { "heading": "SHOP", "menu": "main-menu" } },
+        { "type": "link_list", "settings": { "heading": "HELP", "menu": "footer" } },
+        { "type": "text_column", "settings": { "heading": "CONTACT US" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

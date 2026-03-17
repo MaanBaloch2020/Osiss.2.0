@@ -1,0 +1,187 @@
+{% comment %} sections/reviews.liquid {% endcomment %}
+
+<section class="rv-sec">
+  <div class="wrap">
+
+    <p class="sec-eyebrow">{{ section.settings.eyebrow }}</p>
+    <h2 class="sec-ttl">{{ section.settings.title }}</h2>
+    <div class="sec-rule"></div>
+
+    <div class="rv-grid">
+
+      <!-- Summary / Rating Breakdown -->
+      <div class="rv-summary">
+        <div class="rv-big-score">{{ section.settings.avg_rating }}</div>
+        <div class="rv-stars-big">
+          {%- for i in (1..5) -%}
+            <svg width="18" height="18" style="color:#000"><use href="#ico-star"/></svg>
+          {%- endfor -%}
+        </div>
+        <p class="rv-total-txt">Based on {{ section.settings.total_reviews }} reviews</p>
+        <div id="rvBreakdown" style="margin-top:14px">
+          {%- assign stars_5 = section.settings.stars_5 -%}
+          {%- assign stars_4 = section.settings.stars_4 -%}
+          {%- assign stars_3 = section.settings.stars_3 -%}
+          {%- assign stars_2 = section.settings.stars_2 -%}
+          {%- assign stars_1 = section.settings.stars_1 -%}
+          {%- assign total = stars_5 | plus: stars_4 | plus: stars_3 | plus: stars_2 | plus: stars_1 -%}
+          {%- for i in (1..5) -%}
+            {%- assign star_num = 6 | minus: i -%}
+            {%- if star_num == 5 -%}{%- assign count = stars_5 -%}
+            {%- elsif star_num == 4 -%}{%- assign count = stars_4 -%}
+            {%- elsif star_num == 3 -%}{%- assign count = stars_3 -%}
+            {%- elsif star_num == 2 -%}{%- assign count = stars_2 -%}
+            {%- else -%}{%- assign count = stars_1 -%}
+            {%- endif -%}
+            {%- assign pct = count | times: 100 | divided_by: total -%}
+            <div class="rv-bar-row">
+              <span class="rv-bar-label">{{ star_num }}★</span>
+              <div class="rv-bar-track"><div class="rv-bar-fill" style="width:{{ pct }}%"></div></div>
+              <span class="rv-bar-count">{{ count }}</span>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+
+      <!-- Slideshow -->
+      <div>
+        <div class="sl-wrap">
+          <div id="rvTrack">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'review' -%}
+                <div class="sl-slide" id="rv-{{ forloop.index0 }}" style="{% unless forloop.first %}display:none{% endunless %}">
+                  <div class="review-card" {{ block.shopify_attributes }}>
+                    <div class="rv-top">
+                      <div style="display:flex;align-items:center;gap:12px;flex:1">
+                        <div class="rv-avatar">{{ block.settings.initials | default: 'VB' }}</div>
+                        <div class="rv-name-wrap">
+                          <p class="rv-name">{{ block.settings.name | default: 'Verified Buyer' }}</p>
+                          <p class="rv-location">{{ block.settings.location }}</p>
+                        </div>
+                      </div>
+                      <span class="rv-verified">✓ VERIFIED</span>
+                    </div>
+                    <div class="rv-rating-line">
+                      <div style="display:flex;gap:2px">
+                        {%- for i in (1..5) -%}
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="{% if i <= block.settings.rating %}#f59e0b{% else %}#e0e0e0{% endif %}">
+                            <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
+                          </svg>
+                        {%- endfor -%}
+                      </div>
+                      <span class="rv-rating-chip">⭐ {{ block.settings.rating }}.0 / 5</span>
+                    </div>
+                    <p class="rv-product">{{ block.settings.product_name }}</p>
+                    <p class="rv-text">{{ block.settings.text }}</p>
+                  </div>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+
+        <div class="sl-dots" id="rvDots">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'review' -%}
+              <button class="sl-dot{% if forloop.first %} on{% endif %}" onclick="rvGoTo({{ forloop.index0 }})" aria-label="Review {{ forloop.index }}"></button>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+
+        <div class="sl-nav">
+          <button onclick="rvMove(-1)" aria-label="Previous review">← PREV</button>
+          <button onclick="rvMove(1)" aria-label="Next review">NEXT →</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+var rvIdx = 0;
+var rvSlides = document.querySelectorAll('.sl-slide');
+var rvDotEls = document.querySelectorAll('.sl-dot');
+var rvAuto;
+
+function rvGoTo(i) {
+  rvSlides.forEach(function(s) { s.style.display = 'none'; });
+  rvDotEls.forEach(function(d) { d.classList.remove('on'); });
+  rvIdx = ((i % rvSlides.length) + rvSlides.length) % rvSlides.length;
+  if (rvSlides[rvIdx]) rvSlides[rvIdx].style.display = 'block';
+  if (rvDotEls[rvIdx]) rvDotEls[rvIdx].classList.add('on');
+}
+function rvMove(dir) {
+  clearInterval(rvAuto);
+  rvGoTo(rvIdx + dir);
+  rvAuto = setInterval(function() { rvGoTo(rvIdx + 1); }, 5000);
+}
+rvAuto = setInterval(function() { rvGoTo(rvIdx + 1); }, 5000);
+</script>
+
+{% schema %}
+{
+  "name": "Reviews",
+  "tag": "div",
+  "class": "reviews-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "❤ CUSTOMER LOVE"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "REAL RESULTS, REAL PEOPLE"
+    },
+    {
+      "type": "text",
+      "id": "avg_rating",
+      "label": "Average rating",
+      "default": "4.9"
+    },
+    {
+      "type": "number",
+      "id": "total_reviews",
+      "label": "Total reviews",
+      "default": 2500
+    },
+    {
+      "type": "header",
+      "content": "Rating Breakdown"
+    },
+    { "type": "number", "id": "stars_5", "label": "5-star count", "default": 2350 },
+    { "type": "number", "id": "stars_4", "label": "4-star count", "default": 120 },
+    { "type": "number", "id": "stars_3", "label": "3-star count", "default": 20 },
+    { "type": "number", "id": "stars_2", "label": "2-star count", "default": 7 },
+    { "type": "number", "id": "stars_1", "label": "1-star count", "default": 3 }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        { "type": "text",    "id": "initials",     "label": "Avatar initials", "default": "VB" },
+        { "type": "text",    "id": "name",          "label": "Name",           "default": "Verified Buyer" },
+        { "type": "text",    "id": "location",      "label": "City",           "default": "Lahore" },
+        { "type": "range",   "id": "rating",        "label": "Rating",         "min": 1, "max": 5, "step": 1, "default": 5 },
+        { "type": "text",    "id": "product_name",  "label": "Product",        "default": "Gentle Foaming Cleanser" },
+        { "type": "textarea","id": "text",           "label": "Review text",    "default": "Amazing product! My skin has never felt better." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Reviews",
+      "blocks": [
+        { "type": "review", "settings": { "location": "Lahore",    "rating": 5, "text": "I've been using the Face Wash for 6 weeks and my skin is completely transformed. Acne scars are fading, skin is plump, and I get compliments daily. Absolutely worth every rupee." } },
+        { "type": "review", "settings": { "location": "Karachi",   "rating": 5, "text": "Finally a Pakistani face wash that doesn't strip my skin! The foaming formula is genius for my oily skin. My face feels clean without that tight, dry feeling after washing." } },
+        { "type": "review", "settings": { "location": "Islamabad", "rating": 5, "text": "My breakouts and skin irritation has reduced by 80% in just 3 weeks. The cleanser absorbs into the routine quickly without any residue. OSISS has a customer for life." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

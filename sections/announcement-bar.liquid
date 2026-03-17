@@ -1,0 +1,123 @@
+{% comment %} sections/announcement-bar.liquid {% endcomment %}
+
+{%- if section.settings.show_sale_strip -%}
+<!-- ══ SALE COUNTDOWN STRIP ══ -->
+<div class="sale-strip">
+  <div class="sale-strip-inner">
+    <span class="sale-fire">🔥</span>
+    <span class="sale-text">{{ section.settings.sale_text }}</span>
+    <div class="sale-clock">
+      <div class="sale-unit"><span class="sale-num" id="saleHH">47</span><span class="sale-lbl">HRS</span></div>
+      <span class="sale-colon">:</span>
+      <div class="sale-unit"><span class="sale-num" id="saleMM">59</span><span class="sale-lbl">MIN</span></div>
+      <span class="sale-colon">:</span>
+      <div class="sale-unit"><span class="sale-num" id="saleSS">00</span><span class="sale-lbl">SEC</span></div>
+    </div>
+    <span class="sale-offer">{{ section.settings.sale_offer | raw }}</span>
+    <a href="{{ section.settings.sale_link }}" class="sale-shop-btn">{{ section.settings.sale_btn_text }}</a>
+  </div>
+</div>
+{%- endif -%}
+
+<!-- ══ ANNOUNCEMENT TICKER ══ -->
+{%- if section.settings.show_ticker -%}
+<div class="announce" aria-hidden="true">
+  <div class="ticker-wrap">
+    <div class="ticker-track">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'ticker_item' -%}
+          <span class="tick-item">{{ block.settings.text }}</span>
+          <span class="tick-sep">✦</span>
+        {%- endif -%}
+      {%- endfor -%}
+      {%- comment -%} Duplicate for infinite scroll {%- endcomment -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'ticker_item' -%}
+          <span class="tick-item">{{ block.settings.text }}</span>
+          <span class="tick-sep">✦</span>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Announcement Bar",
+  "tag": "div",
+  "class": "announcement-bar",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Sale Countdown Strip"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sale_strip",
+      "label": "Show sale countdown strip",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "sale_text",
+      "label": "Sale text",
+      "default": "FLASH SALE"
+    },
+    {
+      "type": "html",
+      "id": "sale_offer",
+      "label": "Offer text (HTML allowed)",
+      "default": "Use code <strong>OSISS10</strong> — Get 10% OFF"
+    },
+    {
+      "type": "text",
+      "id": "sale_btn_text",
+      "label": "Button text",
+      "default": "SHOP NOW"
+    },
+    {
+      "type": "url",
+      "id": "sale_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Ticker"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_ticker",
+      "label": "Show announcement ticker",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "ticker_item",
+      "name": "Ticker Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "FREE SHIPPING ON ORDERS OVER PKR 2,000"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Announcement Bar",
+      "blocks": [
+        { "type": "ticker_item", "settings": { "text": "FREE SHIPPING ON ORDERS OVER PKR 2,000" } },
+        { "type": "ticker_item", "settings": { "text": "PCSIR & DRAP CERTIFIED" } },
+        { "type": "ticker_item", "settings": { "text": "DERMATOLOGIST TESTED" } },
+        { "type": "ticker_item", "settings": { "text": "CRUELTY FREE · MADE IN PAKISTAN 🇵🇰" } },
+        { "type": "ticker_item", "settings": { "text": "COD AVAILABLE NATIONWIDE" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
