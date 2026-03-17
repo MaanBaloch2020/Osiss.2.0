@@ -1,0 +1,12 @@
+{% comment %} snippets/product-card-placeholder.liquid — shown when no collection assigned in editor {% endcomment %}
+<div class="pcard">
+  <div class="pimg-wrap" style="background:#f0f0f0">
+    {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+  </div>
+  <div class="pcard-body">
+    <p class="pname">OSISS™ PRODUCT</p>
+    <p class="psub">Assign a collection in theme editor</p>
+    <p class="pprice">PKR 1,500</p>
+  </div>
+  <button class="btn-atc" disabled>ADD TO CART</button>
+</div>
