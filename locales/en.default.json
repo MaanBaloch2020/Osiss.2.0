@@ -1,0 +1,62 @@
+{
+  "general": {
+    "password_page": { "login_form_heading": "Enter store using password", "login_form_password_label": "Password", "login_form_submit": "Enter", "admin_link_html": "Are you the store owner? <a href=\"/admin\" target=\"_blank\">Log in here</a>" },
+    "meta": { "tags": "Tagged \"{{ tags }}\"", "page": "Page {{ page }}" },
+    "404": { "title": "404 — Page Not Found", "subtext": "The page you were looking for does not exist.", "link": "Continue shopping" },
+    "accessibility": { "skip_to_content": "Skip to content", "close": "Close", "loading": "Loading..." }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "ADD TO CART",
+      "sold_out": "SOLD OUT",
+      "coming_soon": "COMING SOON",
+      "unavailable": "UNAVAILABLE",
+      "quantity": "Quantity",
+      "sale": "SALE",
+      "vendor": "Brand",
+      "regular_price": "Regular price",
+      "sale_price": "Sale price",
+      "unit_price": "Unit price",
+      "out_of_stock": "Out of stock"
+    }
+  },
+  "cart": {
+    "general": {
+      "title": "YOUR CART",
+      "empty": "Your cart is empty",
+      "note": "Add a note to your order",
+      "shipping": "Shipping",
+      "total": "Total",
+      "checkout": "CHECKOUT SECURELY",
+      "continue_shopping": "CONTINUE SHOPPING",
+      "remove": "Remove",
+      "item": "item",
+      "items": "items",
+      "free_shipping": "🎉 FREE SHIPPING UNLOCKED!"
+    }
+  },
+  "contact": {
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "message": "Message",
+      "submit": "SEND MESSAGE",
+      "post_success": "Your message has been sent. We'll reply within 24 hours.",
+      "error": "An error occurred. Please try again."
+    }
+  },
+  "collections": {
+    "general": {
+      "no_products": "No products found.",
+      "all_products": "ALL PRODUCTS",
+      "sort_by": "Sort by"
+    }
+  },
+  "customer": {
+    "log_in": "Log in",
+    "log_out": "Log out",
+    "create_account": "Create account",
+    "account": "Account"
+  }
+}
