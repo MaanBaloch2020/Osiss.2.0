@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,height=device-height,minimum-scale=1.0">
+  <meta name="theme-color" content="#000000">
+
+  {%- comment -%} ══ SEO TITLE & DESCRIPTION ══ {%- endcomment -%}
+  <title>
+    {{ page_title }}
+    {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+    {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+    {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+  </title>
+  <meta name="description" content="{{ page_description | escape }}">
+  {% if settings.meta_keywords != blank %}
+    <meta name="keywords" content="{{ settings.meta_keywords }}">
+  {% endif %}
+
+  {%- comment -%} ══ CANONICAL ══ {%- endcomment -%}
+  <link rel="canonical" href="{{ canonical_url }}">
+
+  {%- comment -%} ══ OPEN GRAPH ══ {%- endcomment -%}
+  <meta property="og:type"        content="{% if template == 'product' %}product{% elsif template == 'article' %}article{% else %}website{% endif %}">
+  <meta property="og:url"         content="{{ canonical_url }}">
+  <meta property="og:title"       content="{{ page_title | escape }}">
+  <meta property="og:description" content="{{ page_description | escape }}">
+  <meta property="og:site_name"   content="{{ shop.name }}">
+  {%- if page_image -%}
+    <meta property="og:image"       content="https:{{ page_image | image_url: width: 1200 }}">
+    <meta property="og:image:width" content="1200">
+  {%- elsif settings.share_image != blank -%}
+    <meta property="og:image"       content="https:{{ settings.share_image | image_url: width: 1200 }}">
+  {%- endif -%}
+
+  {%- comment -%} ══ TWITTER CARD ══ {%- endcomment -%}
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:title"       content="{{ page_title | escape }}">
+  <meta name="twitter:description" content="{{ page_description | escape }}">
+  {%- if page_image -%}
+    <meta name="twitter:image" content="https:{{ page_image | image_url: width: 1200 }}">
+  {%- endif -%}
+
+  {%- comment -%} ══ JSON-LD SCHEMA: ORGANIZATION ══ {%- endcomment -%}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": {{ shop.name | json }},
+    "url": {{ shop.url | json }},
+    {%- if settings.logo != blank -%}
+    "logo": {{ settings.logo | image_url: width: 200 | prepend: "https:" | json }},
+    {%- endif -%}
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "customer service",
+      "availableLanguage": ["English", "Urdu"]
+    },
+    "sameAs": [
+      {{ settings.social_instagram_link | json }},
+      {{ settings.social_facebook_link | json }},
+      {{ settings.social_tiktok_link | json }}
+    ]
+  }
+  </script>
+
+  {%- comment -%} ══ JSON-LD SCHEMA: WEBSITE ══ {%- endcomment -%}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": {{ shop.name | json }},
+    "url": {{ shop.url | json }},
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": { "@type": "EntryPoint", "urlTemplate": "{{ routes.search_url }}?q={search_term_string}" },
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+
+  {%- comment -%} ══ JSON-LD SCHEMA: PRODUCT PAGE ══ {%- endcomment -%}
+  {%- if template == 'product' -%}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": {{ product.title | json }},
+    "description": {{ product.description | strip_html | truncatewords: 50 | json }},
+    "image": {{ product.featured_image | image_url: width: 800 | prepend: "https:" | json }},
+    "brand": { "@type": "Brand", "name": {{ shop.name | json }} },
+    "offers": {
+      "@type": "Offer",
+      "price": {{ product.price | money_without_currency | json }},
+      "priceCurrency": {{ cart.currency.iso_code | json }},
+      "availability": "{% if product.available %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}",
+      "url": {{ canonical_url | json }},
+      "seller": { "@type": "Organization", "name": {{ shop.name | json }} }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "reviewCount": "2500"
+    }
+  }
+  </script>
+  {%- endif -%}
+
+  {%- comment -%} ══ PRECONNECT FOR SPEED ══ {%- endcomment -%}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,700&display=swap" rel="stylesheet">
+
+  {%- comment -%} ══ FAVICON ══ {%- endcomment -%}
+  {%- if settings.favicon != blank -%}
+    <link rel="shortcut icon" href="{{ settings.favicon | image_url: width: 32, height: 32 }}" type="image/png">
+  {%- endif -%}
+
+  {%- comment -%} ══ CSS ══ {%- endcomment -%}
+  {{ 'style.css' | asset_url | stylesheet_tag }}
+
+  {%- comment -%} ══ SHOPIFY REQUIRED ══ {%- endcomment -%}
+  {{ content_for_header }}
+
+  <script>document.documentElement.className=document.documentElement.className.replace('no-js','js');</script>
+</head>
+
+<body>
+
+  {%- comment -%} ══ SVG ICON SPRITE ══ {%- endcomment -%}
+  <svg class="svg-sprite" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="ico-bag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
+    </symbol>
+    <symbol id="ico-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+    </symbol>
+    <symbol id="ico-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </symbol>
+    <symbol id="ico-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+    </symbol>
+    <symbol id="ico-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+    </symbol>
+    <symbol id="ico-star" viewBox="0 0 24 24" fill="currentColor">
+      <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
+    </symbol>
+    <symbol id="ico-chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polyline points="6 9 12 15 18 9"/>
+    </symbol>
+    <symbol id="ico-chevron-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polyline points="9 18 15 12 9 6"/>
+    </symbol>
+    <symbol id="ico-truck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
+    </symbol>
+    <symbol id="ico-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+    </symbol>
+    <symbol id="ico-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/>
+    </symbol>
+    <symbol id="ico-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <polyline points="20 6 9 17 4 12"/>
+    </symbol>
+    <symbol id="ico-instagram" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+    </symbol>
+    <symbol id="ico-facebook" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+    </symbol>
+    <symbol id="ico-tiktok" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.77a4.85 4.85 0 0 1-1.01-.08z"/>
+    </symbol>
+    <symbol id="ico-wa" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.553 4.122 1.523 5.856L0 24l6.335-1.518A11.95 11.95 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.797 9.797 0 0 1-5.006-1.373l-.357-.213-3.764.902.955-3.668-.232-.376A9.793 9.793 0 0 1 2.182 12C2.182 6.57 6.57 2.182 12 2.182c5.43 0 9.818 4.388 9.818 9.818 0 5.43-4.388 9.818-9.818 9.818z"/>
+    </symbol>
+  </svg>
+
+  {%- comment -%} ══ SECTIONS ══ {%- endcomment -%}
+  {{ content_for_layout }}
+
+  {%- comment -%} ══ CART DRAWER (Global) ══ {%- endcomment -%}
+  <div class="cart-ov" id="cartOv"></div>
+  <div class="cart-drawer" id="cartDrawer" role="dialog" aria-label="Shopping Cart">
+    <div class="cart-hdr">
+      <span class="cart-title">🛒 YOUR CART</span>
+      <button class="ib" onclick="closeCart()" aria-label="Close cart">
+        <svg width="20" height="20"><use href="#ico-x"/></svg>
+      </button>
+    </div>
+    <div class="cart-body" id="cartBody">
+      <div class="cart-empty">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ddd" stroke-width="1.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <p>YOUR CART IS EMPTY</p>
+      </div>
+    </div>
+    <div id="cartFoot"></div>
+  </div>
+
+  {%- comment -%} ══ WISHLIST PANEL (Global) ══ {%- endcomment -%}
+  <div class="wl-ov" id="wlOverlay"></div>
+  <div class="wl-panel" id="wlPanel" role="dialog" aria-label="Wishlist">
+    <div class="wl-hdr">
+      <div class="wl-ttl"><svg width="17" height="17"><use href="#ico-heart"/></svg> WISHLIST</div>
+      <button class="ib" id="wlClose" aria-label="Close wishlist"><svg width="20" height="20"><use href="#ico-x"/></svg></button>
+    </div>
+    <div class="wl-body" id="wlBody"></div>
+  </div>
+
+  {%- comment -%} ══ WHATSAPP FLOAT BUTTON ══ {%- endcomment -%}
+  <a href="https://wa.me/{{ settings.whatsapp_number | default: '923021345111' }}" class="wa-float" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+    <svg width="26" height="26"><use href="#ico-wa"/></svg>
+  </a>
+
+  {%- comment -%} ══ TOAST NOTIFICATION ══ {%- endcomment -%}
+  <div class="toast" id="osiss-toast" aria-live="polite"></div>
+
+  {%- comment -%} ══ SCRIPTS ══ {%- endcomment -%}
+  <script src="{{ 'main.js' | asset_url }}" defer></script>
+
+</body>
+</html>
